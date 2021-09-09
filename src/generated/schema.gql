@@ -1,0 +1,114 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type DealershipCount {
+  bookings: Int!
+}
+
+type Dealership {
+  id: ID!
+  title: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  bookings: [Booking!]
+  _count: DealershipCount
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type CustomerCount {
+  bookings: Int!
+}
+
+type Customer {
+  id: ID!
+  email: String!
+  phoneNumber: String!
+  bookings: [Booking!]
+  _count: CustomerCount
+}
+
+type VehicleCount {
+  bookings: Int!
+}
+
+type Vehicle {
+  vin: ID!
+  model: String!
+  make: String!
+  bookings: [Booking!]
+  _count: VehicleCount
+}
+
+type Booking {
+  id: ID!
+  dealership: Dealership!
+  dealershipId: String!
+  customer: Customer!
+  customerId: String!
+  vehicle: Vehicle!
+  vehicleVin: String!
+  time: DateTime!
+}
+
+type Query {
+  findBooking: Booking!
+}
+
+type Mutation {
+  createBooking(bookingCreateInput: BookingCreateWithoutDealershipInput!): Booking!
+}
+
+input BookingCreateWithoutDealershipInput {
+  id: String
+  time: DateTime!
+  customer: CustomerCreateNestedOneWithoutBookingsInput!
+  vehicle: VehicleCreateNestedOneWithoutBookingsInput!
+}
+
+input CustomerCreateNestedOneWithoutBookingsInput {
+  create: CustomerCreateWithoutBookingsInput
+  connectOrCreate: CustomerCreateOrConnectWithoutBookingsInput
+  connect: CustomerWhereUniqueInput
+}
+
+input CustomerCreateWithoutBookingsInput {
+  id: String
+  email: String!
+  phoneNumber: String!
+}
+
+input CustomerCreateOrConnectWithoutBookingsInput {
+  where: CustomerWhereUniqueInput!
+  create: CustomerCreateWithoutBookingsInput!
+}
+
+input CustomerWhereUniqueInput {
+  id: String
+  email: String
+}
+
+input VehicleCreateNestedOneWithoutBookingsInput {
+  create: VehicleCreateWithoutBookingsInput
+  connectOrCreate: VehicleCreateOrConnectWithoutBookingsInput
+  connect: VehicleWhereUniqueInput
+}
+
+input VehicleCreateWithoutBookingsInput {
+  vin: String!
+  model: String!
+  make: String!
+}
+
+input VehicleCreateOrConnectWithoutBookingsInput {
+  where: VehicleWhereUniqueInput!
+  create: VehicleCreateWithoutBookingsInput!
+}
+
+input VehicleWhereUniqueInput {
+  vin: String
+}

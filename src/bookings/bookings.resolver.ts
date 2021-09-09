@@ -15,4 +15,7 @@ export class BookingsResolver {
   ) {
     return this.bookingsService.create(bookingCreateInput);
   }
+
+  @Query(() => Booking)
+  findBooking() {}
 }

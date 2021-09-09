@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres
+    command: postgres -c log_statement=all
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+
+ #app:
+ #  image: .
+ #  ports:
+ #    - 3000:3000
+ #  environment:
+ #    - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/postgres?schema=public
