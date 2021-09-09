@@ -8,4 +8,47 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
+}
+
+generator nestgraphql {
+  provider = "node node_modules/prisma-nestjs-graphql"
+  output = "../src/generated/prisma"
+}
+
+model Dealership {
+  id String @id @default(cuid())
+  title String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookings Booking[]
+}
+
+model Booking {
+  id String @id @default(cuid())
+  dealership Dealership @relation(fields: [dealershipId], references: [id])
+  dealershipId String
+  customer Customer @relation(fields: [customerId], references: [id])
+  customerId String
+  vehicle Vehicle @relation(fields: [vehicleVin], references: [vin])
+  vehicleVin String
+  time DateTime
+}
+
+model Customer {
+  id String @id @default(cuid())
+  email String @unique
+  phoneNumber String
+
+  bookings Booking[]
+}
+
+model Vehicle {
+  vin String @id
+  model String
+  make String
+
+  bookings Booking[]
 }
