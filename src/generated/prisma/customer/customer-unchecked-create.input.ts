@@ -13,8 +13,6 @@ export class CustomerUncheckedCreateInput {
   @Field(() => String, { nullable: false })
   phoneNumber!: string;
 
-  @Field(() => BookingUncheckedCreateNestedManyWithoutCustomerInput, {
-    nullable: true,
-  })
+  @Field(() => BookingUncheckedCreateNestedManyWithoutCustomerInput, { nullable: true })
   bookings?: BookingUncheckedCreateNestedManyWithoutCustomerInput;
 }

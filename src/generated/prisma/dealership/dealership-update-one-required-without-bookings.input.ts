@@ -11,9 +11,7 @@ export class DealershipUpdateOneRequiredWithoutBookingsInput {
   @Field(() => DealershipCreateWithoutBookingsInput, { nullable: true })
   create?: DealershipCreateWithoutBookingsInput;
 
-  @Field(() => DealershipCreateOrConnectWithoutBookingsInput, {
-    nullable: true,
-  })
+  @Field(() => DealershipCreateOrConnectWithoutBookingsInput, { nullable: true })
   connectOrCreate?: DealershipCreateOrConnectWithoutBookingsInput;
 
   @Field(() => DealershipUpsertWithoutBookingsInput, { nullable: true })

@@ -7,7 +7,4 @@ export enum DealershipScalarFieldEnum {
   updatedAt = 'updatedAt',
 }
 
-registerEnumType(DealershipScalarFieldEnum, {
-  name: 'DealershipScalarFieldEnum',
-  description: undefined,
-});
+registerEnumType(DealershipScalarFieldEnum, { name: 'DealershipScalarFieldEnum', description: undefined });

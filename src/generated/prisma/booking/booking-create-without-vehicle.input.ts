@@ -11,9 +11,7 @@ export class BookingCreateWithoutVehicleInput {
   @Field(() => Date, { nullable: false })
   time!: Date | string;
 
-  @Field(() => DealershipCreateNestedOneWithoutBookingsInput, {
-    nullable: false,
-  })
+  @Field(() => DealershipCreateNestedOneWithoutBookingsInput, { nullable: false })
   dealership!: DealershipCreateNestedOneWithoutBookingsInput;
 
   @Field(() => CustomerCreateNestedOneWithoutBookingsInput, { nullable: false })

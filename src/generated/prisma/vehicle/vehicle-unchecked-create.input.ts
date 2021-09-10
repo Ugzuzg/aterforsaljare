@@ -13,8 +13,6 @@ export class VehicleUncheckedCreateInput {
   @Field(() => String, { nullable: false })
   make!: string;
 
-  @Field(() => BookingUncheckedCreateNestedManyWithoutVehicleInput, {
-    nullable: true,
-  })
+  @Field(() => BookingUncheckedCreateNestedManyWithoutVehicleInput, { nullable: true })
   bookings?: BookingUncheckedCreateNestedManyWithoutVehicleInput;
 }

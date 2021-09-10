@@ -14,14 +14,10 @@ export class BookingUpdateManyWithoutDealershipInput {
   @Field(() => [BookingCreateWithoutDealershipInput], { nullable: true })
   create?: Array<BookingCreateWithoutDealershipInput>;
 
-  @Field(() => [BookingCreateOrConnectWithoutDealershipInput], {
-    nullable: true,
-  })
+  @Field(() => [BookingCreateOrConnectWithoutDealershipInput], { nullable: true })
   connectOrCreate?: Array<BookingCreateOrConnectWithoutDealershipInput>;
 
-  @Field(() => [BookingUpsertWithWhereUniqueWithoutDealershipInput], {
-    nullable: true,
-  })
+  @Field(() => [BookingUpsertWithWhereUniqueWithoutDealershipInput], { nullable: true })
   upsert?: Array<BookingUpsertWithWhereUniqueWithoutDealershipInput>;
 
   @Field(() => BookingCreateManyDealershipInputEnvelope, { nullable: true })
@@ -39,14 +35,10 @@ export class BookingUpdateManyWithoutDealershipInput {
   @Field(() => [BookingWhereUniqueInput], { nullable: true })
   delete?: Array<BookingWhereUniqueInput>;
 
-  @Field(() => [BookingUpdateWithWhereUniqueWithoutDealershipInput], {
-    nullable: true,
-  })
+  @Field(() => [BookingUpdateWithWhereUniqueWithoutDealershipInput], { nullable: true })
   update?: Array<BookingUpdateWithWhereUniqueWithoutDealershipInput>;
 
-  @Field(() => [BookingUpdateManyWithWhereWithoutDealershipInput], {
-    nullable: true,
-  })
+  @Field(() => [BookingUpdateManyWithWhereWithoutDealershipInput], { nullable: true })
   updateMany?: Array<BookingUpdateManyWithWhereWithoutDealershipInput>;
 
   @Field(() => [BookingScalarWhereInput], { nullable: true })

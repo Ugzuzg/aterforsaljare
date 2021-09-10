@@ -17,9 +17,7 @@ export class BookingUpdateManyWithoutVehicleInput {
   @Field(() => [BookingCreateOrConnectWithoutVehicleInput], { nullable: true })
   connectOrCreate?: Array<BookingCreateOrConnectWithoutVehicleInput>;
 
-  @Field(() => [BookingUpsertWithWhereUniqueWithoutVehicleInput], {
-    nullable: true,
-  })
+  @Field(() => [BookingUpsertWithWhereUniqueWithoutVehicleInput], { nullable: true })
   upsert?: Array<BookingUpsertWithWhereUniqueWithoutVehicleInput>;
 
   @Field(() => BookingCreateManyVehicleInputEnvelope, { nullable: true })
@@ -37,14 +35,10 @@ export class BookingUpdateManyWithoutVehicleInput {
   @Field(() => [BookingWhereUniqueInput], { nullable: true })
   delete?: Array<BookingWhereUniqueInput>;
 
-  @Field(() => [BookingUpdateWithWhereUniqueWithoutVehicleInput], {
-    nullable: true,
-  })
+  @Field(() => [BookingUpdateWithWhereUniqueWithoutVehicleInput], { nullable: true })
   update?: Array<BookingUpdateWithWhereUniqueWithoutVehicleInput>;
 
-  @Field(() => [BookingUpdateManyWithWhereWithoutVehicleInput], {
-    nullable: true,
-  })
+  @Field(() => [BookingUpdateManyWithWhereWithoutVehicleInput], { nullable: true })
   updateMany?: Array<BookingUpdateManyWithWhereWithoutVehicleInput>;
 
   @Field(() => [BookingScalarWhereInput], { nullable: true })

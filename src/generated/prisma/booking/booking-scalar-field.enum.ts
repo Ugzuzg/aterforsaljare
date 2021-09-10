@@ -8,7 +8,4 @@ export enum BookingScalarFieldEnum {
   time = 'time',
 }
 
-registerEnumType(BookingScalarFieldEnum, {
-  name: 'BookingScalarFieldEnum',
-  description: undefined,
-});
+registerEnumType(BookingScalarFieldEnum, { name: 'BookingScalarFieldEnum', description: undefined });

@@ -18,8 +18,6 @@ export class DealershipUncheckedUpdateInput {
   @Field(() => DateTimeFieldUpdateOperationsInput, { nullable: true })
   updatedAt?: DateTimeFieldUpdateOperationsInput;
 
-  @Field(() => BookingUncheckedUpdateManyWithoutDealershipInput, {
-    nullable: true,
-  })
+  @Field(() => BookingUncheckedUpdateManyWithoutDealershipInput, { nullable: true })
   bookings?: BookingUncheckedUpdateManyWithoutDealershipInput;
 }

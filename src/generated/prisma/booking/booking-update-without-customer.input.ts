@@ -13,9 +13,7 @@ export class BookingUpdateWithoutCustomerInput {
   @Field(() => DateTimeFieldUpdateOperationsInput, { nullable: true })
   time?: DateTimeFieldUpdateOperationsInput;
 
-  @Field(() => DealershipUpdateOneRequiredWithoutBookingsInput, {
-    nullable: true,
-  })
+  @Field(() => DealershipUpdateOneRequiredWithoutBookingsInput, { nullable: true })
   dealership?: DealershipUpdateOneRequiredWithoutBookingsInput;
 
   @Field(() => VehicleUpdateOneRequiredWithoutBookingsInput, { nullable: true })

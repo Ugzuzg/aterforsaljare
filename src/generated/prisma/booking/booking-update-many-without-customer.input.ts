@@ -17,9 +17,7 @@ export class BookingUpdateManyWithoutCustomerInput {
   @Field(() => [BookingCreateOrConnectWithoutCustomerInput], { nullable: true })
   connectOrCreate?: Array<BookingCreateOrConnectWithoutCustomerInput>;
 
-  @Field(() => [BookingUpsertWithWhereUniqueWithoutCustomerInput], {
-    nullable: true,
-  })
+  @Field(() => [BookingUpsertWithWhereUniqueWithoutCustomerInput], { nullable: true })
   upsert?: Array<BookingUpsertWithWhereUniqueWithoutCustomerInput>;
 
   @Field(() => BookingCreateManyCustomerInputEnvelope, { nullable: true })
@@ -37,14 +35,10 @@ export class BookingUpdateManyWithoutCustomerInput {
   @Field(() => [BookingWhereUniqueInput], { nullable: true })
   delete?: Array<BookingWhereUniqueInput>;
 
-  @Field(() => [BookingUpdateWithWhereUniqueWithoutCustomerInput], {
-    nullable: true,
-  })
+  @Field(() => [BookingUpdateWithWhereUniqueWithoutCustomerInput], { nullable: true })
   update?: Array<BookingUpdateWithWhereUniqueWithoutCustomerInput>;
 
-  @Field(() => [BookingUpdateManyWithWhereWithoutCustomerInput], {
-    nullable: true,
-  })
+  @Field(() => [BookingUpdateManyWithWhereWithoutCustomerInput], { nullable: true })
   updateMany?: Array<BookingUpdateManyWithWhereWithoutCustomerInput>;
 
   @Field(() => [BookingScalarWhereInput], { nullable: true })

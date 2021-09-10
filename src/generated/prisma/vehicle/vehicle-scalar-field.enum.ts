@@ -6,7 +6,4 @@ export enum VehicleScalarFieldEnum {
   make = 'make',
 }
 
-registerEnumType(VehicleScalarFieldEnum, {
-  name: 'VehicleScalarFieldEnum',
-  description: undefined,
-});
+registerEnumType(VehicleScalarFieldEnum, { name: 'VehicleScalarFieldEnum', description: undefined });

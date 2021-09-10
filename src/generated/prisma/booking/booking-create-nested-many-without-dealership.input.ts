@@ -10,9 +10,7 @@ export class BookingCreateNestedManyWithoutDealershipInput {
   @Field(() => [BookingCreateWithoutDealershipInput], { nullable: true })
   create?: Array<BookingCreateWithoutDealershipInput>;
 
-  @Field(() => [BookingCreateOrConnectWithoutDealershipInput], {
-    nullable: true,
-  })
+  @Field(() => [BookingCreateOrConnectWithoutDealershipInput], { nullable: true })
   connectOrCreate?: Array<BookingCreateOrConnectWithoutDealershipInput>;
 
   @Field(() => BookingCreateManyDealershipInputEnvelope, { nullable: true })

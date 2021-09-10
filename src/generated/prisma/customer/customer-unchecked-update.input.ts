@@ -14,8 +14,6 @@ export class CustomerUncheckedUpdateInput {
   @Field(() => StringFieldUpdateOperationsInput, { nullable: true })
   phoneNumber?: StringFieldUpdateOperationsInput;
 
-  @Field(() => BookingUncheckedUpdateManyWithoutCustomerInput, {
-    nullable: true,
-  })
+  @Field(() => BookingUncheckedUpdateManyWithoutCustomerInput, { nullable: true })
   bookings?: BookingUncheckedUpdateManyWithoutCustomerInput;
 }

@@ -16,8 +16,6 @@ export class DealershipCreateInput {
   @Field(() => Date, { nullable: true })
   updatedAt?: Date | string;
 
-  @Field(() => BookingCreateNestedManyWithoutDealershipInput, {
-    nullable: true,
-  })
+  @Field(() => BookingCreateNestedManyWithoutDealershipInput, { nullable: true })
   bookings?: BookingCreateNestedManyWithoutDealershipInput;
 }

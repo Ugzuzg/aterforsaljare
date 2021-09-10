@@ -14,8 +14,6 @@ export class VehicleUncheckedUpdateInput {
   @Field(() => StringFieldUpdateOperationsInput, { nullable: true })
   make?: StringFieldUpdateOperationsInput;
 
-  @Field(() => BookingUncheckedUpdateManyWithoutVehicleInput, {
-    nullable: true,
-  })
+  @Field(() => BookingUncheckedUpdateManyWithoutVehicleInput, { nullable: true })
   bookings?: BookingUncheckedUpdateManyWithoutVehicleInput;
 }

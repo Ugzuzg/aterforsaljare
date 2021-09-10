@@ -6,7 +6,4 @@ export enum CustomerScalarFieldEnum {
   phoneNumber = 'phoneNumber',
 }
 
-registerEnumType(CustomerScalarFieldEnum, {
-  name: 'CustomerScalarFieldEnum',
-  description: undefined,
-});
+registerEnumType(CustomerScalarFieldEnum, { name: 'CustomerScalarFieldEnum', description: undefined });
