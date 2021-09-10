@@ -1,7 +1,5 @@
 import path from 'path';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { BookingsModule } from './bookings/bookings.module';
 import { PrismaModule } from './prisma/prisma.module';
@@ -16,7 +14,6 @@ import { AuthPlugin } from './auth.plugin';
     PrismaModule,
     BookingsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, AuthPlugin],
+  providers: [AuthPlugin],
 })
 export class AppModule {}
