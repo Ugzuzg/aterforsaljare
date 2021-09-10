@@ -56,7 +56,129 @@ type Booking {
 }
 
 type Query {
-  findBookings: [Booking!]!
+  findBookings(bookingWhereInput: BookingWhereInput): [Booking!]!
+}
+
+input BookingWhereInput {
+  AND: [BookingWhereInput!]
+  OR: [BookingWhereInput!]
+  NOT: [BookingWhereInput!]
+  id: StringFilter
+  dealership: DealershipRelationFilter
+  dealershipId: StringFilter
+  customer: CustomerRelationFilter
+  customerId: StringFilter
+  vehicle: VehicleRelationFilter
+  vehicleVin: StringFilter
+  time: DateTimeFilter
+}
+
+input StringFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: NestedStringFilter
+}
+
+enum QueryMode {
+  default
+  insensitive
+}
+
+input NestedStringFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringFilter
+}
+
+input DealershipRelationFilter {
+  is: DealershipWhereInput
+  isNot: DealershipWhereInput
+}
+
+input DealershipWhereInput {
+  AND: [DealershipWhereInput!]
+  OR: [DealershipWhereInput!]
+  NOT: [DealershipWhereInput!]
+  id: StringFilter
+  title: StringFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  bookings: BookingListRelationFilter
+}
+
+input DateTimeFilter {
+  equals: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+  not: NestedDateTimeFilter
+}
+
+input NestedDateTimeFilter {
+  equals: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+  not: NestedDateTimeFilter
+}
+
+input BookingListRelationFilter {
+  every: BookingWhereInput
+  some: BookingWhereInput
+  none: BookingWhereInput
+}
+
+input CustomerRelationFilter {
+  is: CustomerWhereInput
+  isNot: CustomerWhereInput
+}
+
+input CustomerWhereInput {
+  AND: [CustomerWhereInput!]
+  OR: [CustomerWhereInput!]
+  NOT: [CustomerWhereInput!]
+  id: StringFilter
+  email: StringFilter
+  phoneNumber: StringFilter
+  bookings: BookingListRelationFilter
+}
+
+input VehicleRelationFilter {
+  is: VehicleWhereInput
+  isNot: VehicleWhereInput
+}
+
+input VehicleWhereInput {
+  AND: [VehicleWhereInput!]
+  OR: [VehicleWhereInput!]
+  NOT: [VehicleWhereInput!]
+  vin: StringFilter
+  model: StringFilter
+  make: StringFilter
+  bookings: BookingListRelationFilter
 }
 
 type Mutation {

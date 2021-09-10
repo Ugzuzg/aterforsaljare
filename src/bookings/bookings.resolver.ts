@@ -4,6 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { BookingsService } from './bookings.service';
 import { Booking } from '../generated/prisma/booking/booking.model';
 import { BookingCreateWithoutDealershipInput } from '../generated/prisma/booking/booking-create-without-dealership.input';
+import { BookingWhereInput } from '../generated/prisma/booking/booking-where.input';
 
 @Resolver(() => Booking)
 export class BookingsResolver {
@@ -19,8 +20,11 @@ export class BookingsResolver {
   }
 
   @Query(() => [Booking])
-  findBookings(@Context('dealershipId') dealershipId: string) {
-    return this.prisma.booking.findMany({ where: { dealershipId } });
+  findBookings(
+    @Context('dealershipId') dealershipId: string,
+    @Args('bookingWhereInput', { nullable: true }) bookingWhereInput?: BookingWhereInput,
+  ) {
+    return this.prisma.booking.findMany({ where: { ...bookingWhereInput, dealershipId } });
   }
 
   @ResolveField()
