@@ -1,21 +1,35 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context, Parent, ResolveField } from '@nestjs/graphql';
 
+import { PrismaService } from '../prisma/prisma.service';
 import { BookingsService } from './bookings.service';
 import { Booking } from '../generated/prisma/booking/booking.model';
 import { BookingCreateWithoutDealershipInput } from '../generated/prisma/booking/booking-create-without-dealership.input';
 
 @Resolver(() => Booking)
 export class BookingsResolver {
-  constructor(private readonly bookingsService: BookingsService) {}
+  constructor(private readonly bookingsService: BookingsService, private readonly prisma: PrismaService) {}
 
   @Mutation(() => Booking)
   createBooking(
+    @Context('dealershipId') dealershipId: string,
     @Args('bookingCreateInput')
     bookingCreateInput: BookingCreateWithoutDealershipInput,
   ) {
-    return this.bookingsService.create(bookingCreateInput);
+    return this.bookingsService.create(dealershipId, bookingCreateInput);
   }
 
-  @Query(() => Booking)
-  findBooking() {}
+  @Query(() => [Booking])
+  findBookings(@Context('dealershipId') dealershipId: string) {
+    return this.prisma.booking.findMany({ where: { dealershipId } });
+  }
+
+  @ResolveField()
+  async customer(@Parent() booking: Booking) {
+    return this.prisma.booking.findUnique({ where: { id: booking.id } }).customer();
+  }
+
+  @ResolveField()
+  async vehicle(@Parent() booking: Booking) {
+    return this.prisma.booking.findUnique({ where: { id: booking.id } }).vehicle();
+  }
 }

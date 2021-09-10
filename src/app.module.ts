@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { BookingsModule } from './bookings/bookings.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { AuthPlugin } from './auth.plugin';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { PrismaModule } from './prisma/prisma.module';
     BookingsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AuthPlugin],
 })
 export class AppModule {}

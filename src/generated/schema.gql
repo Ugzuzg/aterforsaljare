@@ -56,7 +56,7 @@ type Booking {
 }
 
 type Query {
-  findBooking: Booking!
+  findBookings: [Booking!]!
 }
 
 type Mutation {
