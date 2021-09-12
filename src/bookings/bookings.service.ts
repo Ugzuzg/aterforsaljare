@@ -33,8 +33,7 @@ export class BookingsService {
               currentOverlaps: currentOverlaps + 1,
               maxOverlaps: Math.max(maxOverlaps, currentOverlaps + 1),
             };
-          if (coordinate.type === 'y') return { maxOverlaps, currentOverlaps: currentOverlaps - 1 };
-          throw new Error('something weird just happened');
+          return { maxOverlaps, currentOverlaps: currentOverlaps - 1 };
         },
         { currentOverlaps: 0, maxOverlaps: 0 },
       ),
