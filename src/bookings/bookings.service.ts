@@ -69,6 +69,7 @@ export class BookingsService {
       // validate capacity
       const res = await prisma.booking.findMany({
         where: {
+          dealershipId,
           // x < y + 2 && x > y - 2
           time: {
             lt: addMinutes(config.settings.bookingDuration, validatedBookingInput.time),
@@ -78,8 +79,6 @@ export class BookingsService {
       });
 
       const numberOfIntersections = this.countParallelIntervals(res);
-      console.log(numberOfIntersections);
-      console.log(validatedBookingInput);
 
       // TODO: validate this vehicle isn't arealdy booked at that time?
       // TODO: fetch capacity from settings

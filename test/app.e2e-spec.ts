@@ -149,7 +149,7 @@ describe('BookingResolver (e2e)', () => {
       await prisma.dealership.deleteMany();
 
       // generate some random data
-      dealerships = _.times(1, () => faker.dealership.dealership());
+      dealerships = _.times(2, () => faker.dealership.dealership());
       vehicles = _.times(3, () => faker.dealership.vehicle());
       customers = _.times(1, () => faker.dealership.customer());
 
@@ -194,15 +194,18 @@ describe('BookingResolver (e2e)', () => {
       {
         case: 'fails to create a booking outside of working hours',
         inputFactory: () => ({
-          time: '2021-09-10T23:00:55.000Z',
-          customer: {
-            connect: {
-              id: customers[0].id,
+          dealershipId: dealerships[0].id,
+          bookingCreateInput: {
+            time: '2021-09-10T23:00:55.000Z',
+            customer: {
+              connect: {
+                id: customers[0].id,
+              },
             },
-          },
-          vehicle: {
-            connect: {
-              vin: vehicles[0].vin,
+            vehicle: {
+              connect: {
+                vin: vehicles[0].vin,
+              },
             },
           },
         }),
@@ -215,15 +218,18 @@ describe('BookingResolver (e2e)', () => {
       {
         case: 'creates a single booking and rounds the start time',
         inputFactory: () => ({
-          time: '2021-09-10T09:00:10.000Z',
-          customer: {
-            connect: {
-              id: customers[0].id,
+          dealershipId: dealerships[0].id,
+          bookingCreateInput: {
+            time: '2021-09-10T09:00:10.000Z',
+            customer: {
+              connect: {
+                id: customers[0].id,
+              },
             },
-          },
-          vehicle: {
-            connect: {
-              vin: vehicles[0].vin,
+            vehicle: {
+              connect: {
+                vin: vehicles[0].vin,
+              },
             },
           },
         }),
@@ -237,15 +243,18 @@ describe('BookingResolver (e2e)', () => {
       {
         case: 'creates a single booking near the maximum capacity end',
         inputFactory: () => ({
-          time: '2021-09-10T12:00:12.000Z',
-          customer: {
-            connect: {
-              id: customers[0].id,
+          dealershipId: dealerships[0].id,
+          bookingCreateInput: {
+            time: '2021-09-10T12:00:12.000Z',
+            customer: {
+              connect: {
+                id: customers[0].id,
+              },
             },
-          },
-          vehicle: {
-            connect: {
-              vin: vehicles[1].vin,
+            vehicle: {
+              connect: {
+                vin: vehicles[1].vin,
+              },
             },
           },
         }),
@@ -257,17 +266,45 @@ describe('BookingResolver (e2e)', () => {
         },
       },
       {
-        case: 'fails to create a booking if the facility is at maximum capacity',
+        case: 'creates a single booking in a second dealership when the first one is at maximum capacity',
         inputFactory: () => ({
-          time: '2021-09-10T11:00:00.000Z',
-          customer: {
-            connect: {
-              id: customers[0].id,
+          dealershipId: dealerships[1].id,
+          bookingCreateInput: {
+            time: '2021-09-10T10:30:00.000Z',
+            customer: {
+              connect: {
+                id: customers[0].id,
+              },
+            },
+            vehicle: {
+              connect: {
+                vin: vehicles[2].vin,
+              },
             },
           },
-          vehicle: {
-            connect: {
-              vin: vehicles[2].vin,
+        }),
+        success: true,
+        expectToPass: (result: any) => {
+          expect(result.data.createBooking).toHaveProperty('time', '2021-09-10T10:30:00.000Z');
+          expect(result.data.createBooking).toHaveProperty('customer.email', customers[0].email);
+          expect(result.data.createBooking).toHaveProperty('vehicle.vin', vehicles[2].vin);
+        },
+      },
+      {
+        case: 'fails to create a booking if the facility is at maximum capacity',
+        inputFactory: () => ({
+          dealershipId: dealerships[0].id,
+          bookingCreateInput: {
+            time: '2021-09-10T11:00:00.000Z',
+            customer: {
+              connect: {
+                id: customers[0].id,
+              },
+            },
+            vehicle: {
+              connect: {
+                vin: vehicles[2].vin,
+              },
             },
           },
         }),
@@ -280,15 +317,18 @@ describe('BookingResolver (e2e)', () => {
       {
         case: 'fails to create a booking if the facility is at maximum capacity at the edge',
         inputFactory: () => ({
-          time: '2021-09-10T11:59:00.000Z',
-          customer: {
-            connect: {
-              id: customers[0].id,
+          dealershipId: dealerships[0].id,
+          bookingCreateInput: {
+            time: '2021-09-10T11:59:00.000Z',
+            customer: {
+              connect: {
+                id: customers[0].id,
+              },
             },
-          },
-          vehicle: {
-            connect: {
-              vin: vehicles[2].vin,
+            vehicle: {
+              connect: {
+                vin: vehicles[2].vin,
+              },
             },
           },
         }),
@@ -299,11 +339,12 @@ describe('BookingResolver (e2e)', () => {
         },
       },
     ])('$case', async ({ inputFactory, success, expectToPass }) => {
+      const { dealershipId, bookingCreateInput } = inputFactory();
       const response = await app.inject({
         method: 'POST',
         url: '/graphql',
         headers: {
-          'dealership-id': dealerships[0].id,
+          'dealership-id': dealershipId,
         },
         payload: {
           query: `mutation CreateBookingMutation($bookingCreateInput: BookingCreateWithoutDealershipInput!) {
@@ -319,7 +360,7 @@ describe('BookingResolver (e2e)', () => {
             }
           }`,
           variables: {
-            bookingCreateInput: inputFactory(),
+            bookingCreateInput,
           },
         },
       });
