@@ -87,8 +87,8 @@ export class BookingsService {
         throw new Error('the vehicle already has a booking at this time');
 
       // validate capacity
-      // TODO: fetch capacity from settings
       const numberOfIntersections = this.countParallelIntervals(intersectingBookings);
+      // TODO: fetch capacity from settings
       if (numberOfIntersections >= 2) throw new Error('at maximum capacity');
 
       return prisma.booking.create({ data: validatedBookingInput });

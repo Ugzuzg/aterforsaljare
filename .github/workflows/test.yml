@@ -1,0 +1,45 @@
+name: Test
+on: push
+
+jobs:
+  test-and-cover:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: tests
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply migrations to the database
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/tests?schema=public
+
+      - name: Run tests & publish code coverage
+        uses: paambaati/codeclimate-action@v2.7.5
+        env:
+          CC_TEST_REPORTER_ID: 3bc86dd15528f049c9a96ccae910a4479ff3ccd72e0a7aa2f38764eb6de45975
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/tests?schema=public
+        with:
+          coverageCommand: npm run test:cov
+          debug: true
