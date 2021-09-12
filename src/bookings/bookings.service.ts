@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { addMinutes, roundToNearestMinutes, compareAsc, set } from 'date-fns/fp';
+import { addMinutes, subMinutes, roundToNearestMinutes, compareAsc, set } from 'date-fns/fp';
 import _ from 'lodash/fp';
 
 import { PrismaService } from '../prisma/prisma.service';
@@ -64,16 +64,15 @@ export class BookingsService {
         time: roundToNearestMinutes(new Date(bookingCreateInput.time)),
       };
 
-      // TODO: improve errors
       if (!this.fitsIntoWorkingHours(validatedBookingInput)) throw new Error('the booking is outside of working hours');
 
       // validate capacity
       const res = await prisma.booking.findMany({
         where: {
-          // x1 <= y2 && y1 <= x2
+          // x < y + 2 && x > y - 2
           time: {
-            lte: addMinutes(config.settings.bookingDuration, validatedBookingInput.time),
-            gte: validatedBookingInput.time,
+            lt: addMinutes(config.settings.bookingDuration, validatedBookingInput.time),
+            gt: subMinutes(config.settings.bookingDuration, validatedBookingInput.time),
           },
         },
       });
