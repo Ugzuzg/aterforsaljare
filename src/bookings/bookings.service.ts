@@ -16,7 +16,6 @@ export class BookingsService {
   constructor(private prisma: PrismaService) {}
 
   countParallelIntervals(bookings: Booking[]): number {
-    // TODO: rename intersections/overlaps to intervals?
     return _.flow(
       // generate an array of points
       _.flatMap<Booking, { type: 'x' | 'y'; time: Date }>((booking) => [
@@ -65,11 +64,12 @@ export class BookingsService {
 
       if (!this.fitsIntoWorkingHours(validatedBookingInput)) throw new Error('the booking is outside of working hours');
 
-      // validate capacity
-      const res = await prisma.booking.findMany({
+      // fetch all intersecting bookings
+      const intersectingBookings = await prisma.booking.findMany({
         where: {
           dealershipId,
-          // x < y + 2 && x > y - 2
+          // the db and request bookings intersect if
+          // db < request + 2 && db > request - 2
           time: {
             lt: addMinutes(config.settings.bookingDuration, validatedBookingInput.time),
             gt: subMinutes(config.settings.bookingDuration, validatedBookingInput.time),
@@ -77,10 +77,18 @@ export class BookingsService {
         },
       });
 
-      const numberOfIntersections = this.countParallelIntervals(res);
+      // validate this vehicle isn't already booked at that time?
+      const vehicleVin =
+        validatedBookingInput.vehicle.connect?.vin ||
+        validatedBookingInput.vehicle.create?.vin ||
+        validatedBookingInput.vehicle.connectOrCreate?.where?.vin ||
+        validatedBookingInput.vehicle.connectOrCreate?.create?.vin;
+      if (intersectingBookings.find((v) => v.vehicleVin === vehicleVin))
+        throw new Error('the vehicle already has a booking at this time');
 
-      // TODO: validate this vehicle isn't arealdy booked at that time?
+      // validate capacity
       // TODO: fetch capacity from settings
+      const numberOfIntersections = this.countParallelIntervals(intersectingBookings);
       if (numberOfIntersections >= 2) throw new Error('at maximum capacity');
 
       return prisma.booking.create({ data: validatedBookingInput });

@@ -216,11 +216,11 @@ describe('BookingResolver (e2e)', () => {
         },
       },
       {
-        case: 'creates a single booking and rounds the start time',
+        case: 'fails to create a booking if the same car is already booked within an intersecting interval of time',
         inputFactory: () => ({
           dealershipId: dealerships[0].id,
           bookingCreateInput: {
-            time: '2021-09-10T09:00:10.000Z',
+            time: '2021-09-10T09:00:00.000Z',
             customer: {
               connect: {
                 id: customers[0].id,
@@ -233,11 +233,35 @@ describe('BookingResolver (e2e)', () => {
             },
           },
         }),
+        success: false,
+        expectToPass: (result: any) => {
+          expect(result.errors).toHaveLength(1);
+          expect(result.errors[0].message).toEqual('the vehicle already has a booking at this time');
+        },
+      },
+      {
+        case: 'creates a single booking and rounds the start time',
+        inputFactory: () => ({
+          dealershipId: dealerships[0].id,
+          bookingCreateInput: {
+            time: '2021-09-10T09:00:10.000Z',
+            customer: {
+              connect: {
+                id: customers[0].id,
+              },
+            },
+            vehicle: {
+              connect: {
+                vin: vehicles[2].vin,
+              },
+            },
+          },
+        }),
         success: true,
         expectToPass: (result: any) => {
           expect(result.data.createBooking).toHaveProperty('time', '2021-09-10T09:00:00.000Z');
           expect(result.data.createBooking).toHaveProperty('customer.email', customers[0].email);
-          expect(result.data.createBooking).toHaveProperty('vehicle.vin', vehicles[0].vin);
+          expect(result.data.createBooking).toHaveProperty('vehicle.vin', vehicles[2].vin);
         },
       },
       {
@@ -253,7 +277,7 @@ describe('BookingResolver (e2e)', () => {
             },
             vehicle: {
               connect: {
-                vin: vehicles[1].vin,
+                vin: vehicles[2].vin,
               },
             },
           },
@@ -262,7 +286,7 @@ describe('BookingResolver (e2e)', () => {
         expectToPass: (result: any) => {
           expect(result.data.createBooking).toHaveProperty('time', '2021-09-10T12:00:00.000Z');
           expect(result.data.createBooking).toHaveProperty('customer.email', customers[0].email);
-          expect(result.data.createBooking).toHaveProperty('vehicle.vin', vehicles[1].vin);
+          expect(result.data.createBooking).toHaveProperty('vehicle.vin', vehicles[2].vin);
         },
       },
       {
