@@ -50,4 +50,18 @@ describe('BookingsService', () => {
       expect(service.countParallelIntervals(bookings)).toBe(expected);
     });
   });
+
+  describe('#fitsIntoWorkingHours', () => {
+    it.each([
+      [faker.dealership.booking({ time: new Date('2021-09-09T05:00:00') }), false],
+      [faker.dealership.booking({ time: new Date('2021-09-09T08:00:00') }), false],
+      [faker.dealership.booking({ time: new Date('2021-09-09T09:00:00') }), true],
+      [faker.dealership.booking({ time: new Date('2021-09-09T11:25:00') }), true],
+      [faker.dealership.booking({ time: new Date('2021-09-09T15:00:00') }), true],
+      [faker.dealership.booking({ time: new Date('2021-09-09T15:00:01') }), false],
+      [faker.dealership.booking({ time: new Date('2021-09-09T17:00:00') }), false],
+    ])('checks if the booking fits into working hours interval', (booking: Booking, expected: boolean) => {
+      expect(service.fitsIntoWorkingHours(booking)).toBe(expected);
+    });
+  });
 });

@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { addHours, roundToNearestMinutes } from 'date-fns/fp';
+import { addMinutes, roundToNearestMinutes, compareAsc, set } from 'date-fns/fp';
 import _ from 'lodash/fp';
 
 import { PrismaService } from '../prisma/prisma.service';
 
+import config from '../config';
 import { Booking } from '../generated/prisma/booking/booking.model';
 import { BookingCreateInput } from '../generated/prisma/booking/booking-create.input';
 import { BookingCreateWithoutDealershipInput } from '../generated/prisma/booking/booking-create-without-dealership.input';
 
-const bookingDuration = 2;
+type ValidatedBookingCreateInput = BookingCreateInput & { time: Date };
 
 @Injectable()
 export class BookingsService {
@@ -20,7 +21,7 @@ export class BookingsService {
       // generate an array of points
       _.flatMap<Booking, { type: 'x' | 'y'; time: Date }>((booking) => [
         { type: 'x', time: booking.time },
-        { type: 'y', time: addHours(bookingDuration, booking.time) },
+        { type: 'y', time: addMinutes(config.settings.bookingDuration, booking.time) },
       ]),
       // sort the points in time
       _.orderBy(['time', 'type'], ['asc', 'desc']),
@@ -41,9 +42,19 @@ export class BookingsService {
     )(bookings);
   }
 
+  fitsIntoWorkingHours(booking: { time: Date }) {
+    return (
+      compareAsc(set(config.settings.workingHours.start, booking.time), booking.time) >= 0 &&
+      compareAsc(
+        addMinutes(config.settings.bookingDuration, booking.time),
+        set(config.settings.workingHours.end, booking.time),
+      ) >= 0
+    );
+  }
+
   async create(dealershipId: string, bookingCreateInput: BookingCreateWithoutDealershipInput) {
     const booking = await this.prisma.$transaction(async (prisma) => {
-      const validatedBookingInput: BookingCreateInput & { time: Date } = {
+      const validatedBookingInput: ValidatedBookingCreateInput = {
         ...bookingCreateInput,
         dealership: {
           connect: {
@@ -52,11 +63,16 @@ export class BookingsService {
         },
         time: roundToNearestMinutes(new Date(bookingCreateInput.time)),
       };
+
+      // TODO: improve errors
+      if (!this.fitsIntoWorkingHours(validatedBookingInput)) throw new Error('the booking is outside of working hours');
+
+      // validate capacity
       const res = await prisma.booking.findMany({
         where: {
           // x1 <= y2 && y1 <= x2
           time: {
-            lte: addHours(bookingDuration, validatedBookingInput.time),
+            lte: addMinutes(config.settings.bookingDuration, validatedBookingInput.time),
             gte: validatedBookingInput.time,
           },
         },
@@ -66,9 +82,8 @@ export class BookingsService {
       console.log(numberOfIntersections);
       console.log(validatedBookingInput);
 
-      // TODO: validate working hours
+      // TODO: validate this vehicle isn't arealdy booked at that time?
       // TODO: fetch capacity from settings
-      // TODO: improve error
       if (numberOfIntersections >= 2) throw new Error('at maximum capacity');
 
       return prisma.booking.create({ data: validatedBookingInput });
