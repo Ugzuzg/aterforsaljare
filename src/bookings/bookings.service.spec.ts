@@ -46,7 +46,7 @@ describe('BookingsService', () => {
         ],
         3,
       ],
-    ])('some', (bookings: Booking[], expected: number) => {
+    ])('finds the max number of intersecting intervals', (bookings: Booking[], expected: number) => {
       expect(service.countParallelIntervals(bookings)).toBe(expected);
     });
   });

@@ -104,7 +104,6 @@ describe('AppController (e2e)', () => {
       method: 'POST',
       url: '/graphql',
       headers: {
-        ContentType: 'application/json',
         'dealership-id': dealerships[0].id,
       },
       payload: {
