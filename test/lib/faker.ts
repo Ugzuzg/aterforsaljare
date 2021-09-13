@@ -12,6 +12,7 @@ class DealershipFaker {
     return {
       id: cuid(),
       title: faker.company.companyName(),
+      capacity: 2,
       createdAt: new Date(),
       updatedAt: new Date(),
       ...overrides,

@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { Int } from '@nestjs/graphql';
 import { BookingCreateNestedManyWithoutDealershipInput } from '../booking/booking-create-nested-many-without-dealership.input';
 
 @InputType()
@@ -9,6 +10,9 @@ export class DealershipCreateInput {
 
   @Field(() => String, { nullable: false })
   title!: string;
+
+  @Field(() => Int, { nullable: true })
+  capacity?: number;
 
   @Field(() => Date, { nullable: true })
   createdAt?: Date | string;

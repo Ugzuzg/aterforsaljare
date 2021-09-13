@@ -20,6 +20,8 @@ model Dealership {
   id    String @id @default(cuid())
   title String
 
+  capacity Int @default(2)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

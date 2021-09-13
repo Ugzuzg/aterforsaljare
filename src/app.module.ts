@@ -2,6 +2,7 @@ import path from 'path';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { BookingsModule } from './bookings/bookings.module';
+import { DealershipsModule } from './dealerships/dealerships.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthPlugin } from './auth.plugin';
 
@@ -13,6 +14,7 @@ import { AuthPlugin } from './auth.plugin';
     }),
     PrismaModule,
     BookingsModule,
+    DealershipsModule,
   ],
   providers: [AuthPlugin],
 })

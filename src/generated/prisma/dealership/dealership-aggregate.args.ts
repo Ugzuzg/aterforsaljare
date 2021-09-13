@@ -5,6 +5,8 @@ import { DealershipOrderByWithRelationInput } from './dealership-order-by-with-r
 import { DealershipWhereUniqueInput } from './dealership-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { DealershipCountAggregateInput } from './dealership-count-aggregate.input';
+import { DealershipAvgAggregateInput } from './dealership-avg-aggregate.input';
+import { DealershipSumAggregateInput } from './dealership-sum-aggregate.input';
 import { DealershipMinAggregateInput } from './dealership-min-aggregate.input';
 import { DealershipMaxAggregateInput } from './dealership-max-aggregate.input';
 
@@ -27,6 +29,12 @@ export class DealershipAggregateArgs {
 
   @Field(() => DealershipCountAggregateInput, { nullable: true })
   _count?: DealershipCountAggregateInput;
+
+  @Field(() => DealershipAvgAggregateInput, { nullable: true })
+  _avg?: DealershipAvgAggregateInput;
+
+  @Field(() => DealershipSumAggregateInput, { nullable: true })
+  _sum?: DealershipSumAggregateInput;
 
   @Field(() => DealershipMinAggregateInput, { nullable: true })
   _min?: DealershipMinAggregateInput;

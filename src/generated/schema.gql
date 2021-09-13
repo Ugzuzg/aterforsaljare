@@ -9,6 +9,7 @@ type DealershipCount {
 type Dealership {
   id: ID!
   title: String!
+  capacity: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
   bookings: [Booking!]
@@ -118,9 +119,32 @@ input DealershipWhereInput {
   NOT: [DealershipWhereInput!]
   id: StringFilter
   title: StringFilter
+  capacity: IntFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
   bookings: BookingListRelationFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: NestedIntFilter
+}
+
+input NestedIntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: NestedIntFilter
 }
 
 input DateTimeFilter {
@@ -183,6 +207,7 @@ input VehicleWhereInput {
 
 type Mutation {
   createBooking(bookingCreateInput: BookingCreateWithoutDealershipInput!): Booking!
+  updateDealership(dealershipUpdateInput: DealershipUpdateInput!): Dealership!
 }
 
 input BookingCreateWithoutDealershipInput {
@@ -233,4 +258,141 @@ input VehicleCreateOrConnectWithoutBookingsInput {
 
 input VehicleWhereUniqueInput {
   vin: String
+}
+
+input DealershipUpdateInput {
+  id: StringFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
+  capacity: IntFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  bookings: BookingUpdateManyWithoutDealershipInput
+}
+
+input StringFieldUpdateOperationsInput {
+  set: String
+}
+
+input IntFieldUpdateOperationsInput {
+  set: Int
+  increment: Int
+  decrement: Int
+  multiply: Int
+  divide: Int
+}
+
+input DateTimeFieldUpdateOperationsInput {
+  set: DateTime
+}
+
+input BookingUpdateManyWithoutDealershipInput {
+  create: [BookingCreateWithoutDealershipInput!]
+  connectOrCreate: [BookingCreateOrConnectWithoutDealershipInput!]
+  upsert: [BookingUpsertWithWhereUniqueWithoutDealershipInput!]
+  createMany: BookingCreateManyDealershipInputEnvelope
+  connect: [BookingWhereUniqueInput!]
+  set: [BookingWhereUniqueInput!]
+  disconnect: [BookingWhereUniqueInput!]
+  delete: [BookingWhereUniqueInput!]
+  update: [BookingUpdateWithWhereUniqueWithoutDealershipInput!]
+  updateMany: [BookingUpdateManyWithWhereWithoutDealershipInput!]
+  deleteMany: [BookingScalarWhereInput!]
+}
+
+input BookingCreateOrConnectWithoutDealershipInput {
+  where: BookingWhereUniqueInput!
+  create: BookingCreateWithoutDealershipInput!
+}
+
+input BookingWhereUniqueInput {
+  id: String
+}
+
+input BookingUpsertWithWhereUniqueWithoutDealershipInput {
+  where: BookingWhereUniqueInput!
+  update: BookingUpdateWithoutDealershipInput!
+  create: BookingCreateWithoutDealershipInput!
+}
+
+input BookingUpdateWithoutDealershipInput {
+  id: StringFieldUpdateOperationsInput
+  time: DateTimeFieldUpdateOperationsInput
+  customer: CustomerUpdateOneRequiredWithoutBookingsInput
+  vehicle: VehicleUpdateOneRequiredWithoutBookingsInput
+}
+
+input CustomerUpdateOneRequiredWithoutBookingsInput {
+  create: CustomerCreateWithoutBookingsInput
+  connectOrCreate: CustomerCreateOrConnectWithoutBookingsInput
+  upsert: CustomerUpsertWithoutBookingsInput
+  connect: CustomerWhereUniqueInput
+  update: CustomerUpdateWithoutBookingsInput
+}
+
+input CustomerUpsertWithoutBookingsInput {
+  update: CustomerUpdateWithoutBookingsInput!
+  create: CustomerCreateWithoutBookingsInput!
+}
+
+input CustomerUpdateWithoutBookingsInput {
+  id: StringFieldUpdateOperationsInput
+  email: StringFieldUpdateOperationsInput
+  phoneNumber: StringFieldUpdateOperationsInput
+}
+
+input VehicleUpdateOneRequiredWithoutBookingsInput {
+  create: VehicleCreateWithoutBookingsInput
+  connectOrCreate: VehicleCreateOrConnectWithoutBookingsInput
+  upsert: VehicleUpsertWithoutBookingsInput
+  connect: VehicleWhereUniqueInput
+  update: VehicleUpdateWithoutBookingsInput
+}
+
+input VehicleUpsertWithoutBookingsInput {
+  update: VehicleUpdateWithoutBookingsInput!
+  create: VehicleCreateWithoutBookingsInput!
+}
+
+input VehicleUpdateWithoutBookingsInput {
+  vin: StringFieldUpdateOperationsInput
+  model: StringFieldUpdateOperationsInput
+  make: StringFieldUpdateOperationsInput
+}
+
+input BookingCreateManyDealershipInputEnvelope {
+  data: [BookingCreateManyDealershipInput!]!
+  skipDuplicates: Boolean
+}
+
+input BookingCreateManyDealershipInput {
+  id: String
+  customerId: String!
+  vehicleVin: String!
+  time: DateTime!
+}
+
+input BookingUpdateWithWhereUniqueWithoutDealershipInput {
+  where: BookingWhereUniqueInput!
+  data: BookingUpdateWithoutDealershipInput!
+}
+
+input BookingUpdateManyWithWhereWithoutDealershipInput {
+  where: BookingScalarWhereInput!
+  data: BookingUpdateManyMutationInput!
+}
+
+input BookingScalarWhereInput {
+  AND: [BookingScalarWhereInput!]
+  OR: [BookingScalarWhereInput!]
+  NOT: [BookingScalarWhereInput!]
+  id: StringFilter
+  dealershipId: StringFilter
+  customerId: StringFilter
+  vehicleVin: StringFilter
+  time: DateTimeFilter
+}
+
+input BookingUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+  time: DateTimeFieldUpdateOperationsInput
 }

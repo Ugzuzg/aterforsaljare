@@ -11,6 +11,9 @@ export class DealershipCountAggregate {
   title!: number;
 
   @Field(() => Int, { nullable: false })
+  capacity!: number;
+
+  @Field(() => Int, { nullable: false })
   createdAt!: number;
 
   @Field(() => Int, { nullable: false })

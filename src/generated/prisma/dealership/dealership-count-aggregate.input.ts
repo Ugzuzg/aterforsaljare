@@ -10,6 +10,9 @@ export class DealershipCountAggregateInput {
   title?: true;
 
   @Field(() => Boolean, { nullable: true })
+  capacity?: true;
+
+  @Field(() => Boolean, { nullable: true })
   createdAt?: true;
 
   @Field(() => Boolean, { nullable: true })

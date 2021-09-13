@@ -88,8 +88,9 @@ export class BookingsService {
 
       // validate capacity
       const numberOfIntersections = this.countParallelIntervals(intersectingBookings);
-      // TODO: fetch capacity from settings
-      if (numberOfIntersections >= 2) throw new Error('at maximum capacity');
+      const dealership = await this.prisma.dealership.findUnique({ where: { id: dealershipId } });
+      if (!dealership) throw new Error('');
+      if (numberOfIntersections >= dealership.capacity) throw new Error('at maximum capacity');
 
       return prisma.booking.create({ data: validatedBookingInput });
     });

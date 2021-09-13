@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { StringFilter } from '../prisma/string-filter.input';
+import { IntFilter } from '../prisma/int-filter.input';
 import { DateTimeFilter } from '../prisma/date-time-filter.input';
 import { BookingListRelationFilter } from '../booking/booking-list-relation-filter.input';
 
@@ -20,6 +21,9 @@ export class DealershipWhereInput {
 
   @Field(() => StringFilter, { nullable: true })
   title?: StringFilter;
+
+  @Field(() => IntFilter, { nullable: true })
+  capacity?: IntFilter;
 
   @Field(() => DateTimeFilter, { nullable: true })
   createdAt?: DateTimeFilter;

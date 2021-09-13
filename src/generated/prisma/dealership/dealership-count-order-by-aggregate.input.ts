@@ -11,6 +11,9 @@ export class DealershipCountOrderByAggregateInput {
   title?: keyof typeof SortOrder;
 
   @Field(() => SortOrder, { nullable: true })
+  capacity?: keyof typeof SortOrder;
+
+  @Field(() => SortOrder, { nullable: true })
   createdAt?: keyof typeof SortOrder;
 
   @Field(() => SortOrder, { nullable: true })

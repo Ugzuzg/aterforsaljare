@@ -9,6 +9,8 @@ import faker from './lib/faker';
 import { Dealership } from '../src/generated/prisma/dealership/dealership.model';
 import { Vehicle } from '../src/generated/prisma/vehicle/vehicle.model';
 import { Customer } from '../src/generated/prisma/customer/customer.model';
+import { BookingCreateWithoutDealershipInput } from '../src/generated/prisma/booking/booking-create-without-dealership.input';
+import { DealershipUpdateInput } from '../src/generated/prisma/dealership/dealership-update.input';
 
 describe('BookingResolver (e2e)', () => {
   let app: NestFastifyApplication;
@@ -397,6 +399,138 @@ describe('BookingResolver (e2e)', () => {
         expect(result).toHaveProperty('data.createBooking');
       }
       expectToPass(result);
+    });
+  });
+
+  describe('#updateDealership and #createBooking', () => {
+    // setup test data
+    let dealerships: Dealership[];
+    let vehicles: Vehicle[];
+    let customers: Customer[];
+
+    beforeAll(async () => {
+      // clean up
+      await prisma.booking.deleteMany();
+      await prisma.customer.deleteMany();
+      await prisma.vehicle.deleteMany();
+      await prisma.dealership.deleteMany();
+
+      // generate some random data
+      dealerships = [faker.dealership.dealership()];
+      vehicles = _.times(5, () => faker.dealership.vehicle());
+      customers = _.times(1, () => faker.dealership.customer());
+
+      // and insert it into the database
+      await prisma.dealership.createMany({
+        data: dealerships,
+      });
+      await prisma.vehicle.createMany({
+        data: vehicles,
+      });
+      await prisma.customer.createMany({
+        data: customers,
+      });
+    });
+
+    it('', async () => {
+      const createBooking = async (bookingCreateInput: BookingCreateWithoutDealershipInput) =>
+        await app.inject({
+          method: 'POST',
+          url: '/graphql',
+          headers: {
+            'dealership-id': dealerships[0].id,
+          },
+          payload: {
+            query: `mutation CreateBookingMutation($bookingCreateInput: BookingCreateWithoutDealershipInput!) {
+              createBooking(bookingCreateInput: $bookingCreateInput) {
+                id
+                time
+                customer {
+                  email
+                }
+                vehicle {
+                  vin
+                }
+              }
+            }`,
+            variables: {
+              bookingCreateInput,
+            },
+          },
+        });
+      const updateDealership = async (updateDealershipInput: DealershipUpdateInput) =>
+        await app.inject({
+          method: 'POST',
+          url: '/graphql',
+          headers: {
+            'dealership-id': dealerships[0].id,
+          },
+          payload: {
+            query: `mutation UpdateDealershipMutation($updateDealershipInput: DealershipUpdateInput!) {
+              updateDealership(dealershipUpdateInput: $updateDealershipInput) {
+                id
+                title
+                capacity
+              }
+            }`,
+            variables: {
+              updateDealershipInput,
+            },
+          },
+        });
+
+      // try creating 3 bookings for the same time
+      // only two should be careted with the default capacity
+      const time = '2021-09-15T11:00:00.000Z';
+      const results = [];
+      for (let i = 0; i < 3; i++) {
+        const response = await createBooking({
+          time,
+          customer: {
+            connect: {
+              id: customers[0].id,
+            },
+          },
+          vehicle: {
+            connect: {
+              vin: vehicles[i].vin,
+            },
+          },
+        });
+        results.push(response.json());
+      }
+
+      expect(results.filter((r) => r.data)).toHaveLength(2);
+      expect(results.filter((r) => r.errors)).toHaveLength(1);
+
+      await updateDealership({
+        capacity: {
+          set: 4,
+        },
+      });
+
+      // create more bookings
+      for (let i = 2; i < 5; i++) {
+        const response = await createBooking({
+          time,
+          customer: {
+            connect: {
+              id: customers[0].id,
+            },
+          },
+          vehicle: {
+            connect: {
+              vin: vehicles[i].vin,
+            },
+          },
+        });
+        results.push(response.json());
+      }
+
+      // 4 successes: 2 before the update, 2 after
+      expect(results.filter((r) => r.data)).toHaveLength(4);
+      // 2 errors: one caused by capacity before the update to 4, one after
+      expect(results.filter((r) => r.errors)).toHaveLength(2);
     });
   });
 });

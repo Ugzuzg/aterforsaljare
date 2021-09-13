@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import { ID } from '@nestjs/graphql';
+import { Int } from '@nestjs/graphql';
 import { Booking } from '../booking/booking.model';
 import { DealershipCount } from './dealership-count.output';
 
@@ -11,6 +12,9 @@ export class Dealership {
 
   @Field(() => String, { nullable: false })
   title!: string;
+
+  @Field(() => Int, { nullable: false, defaultValue: 2 })
+  capacity!: number;
 
   @Field(() => Date, { nullable: false })
   createdAt!: Date;
