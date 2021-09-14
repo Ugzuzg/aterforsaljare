@@ -4,6 +4,8 @@ services:
   postgres:
     image: postgres
     command: postgres -c log_statement=all
+    volumes:
+      - ./.dev/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     ports:
       - 5432:5432
     environment:

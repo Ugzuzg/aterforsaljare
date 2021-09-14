@@ -11,6 +11,7 @@ export default async (): Promise<Config.InitialOptions> => ({
       transform: {
         '^.+\\.(t|j)s$': 'ts-jest',
       },
+      setupFiles: ['./test/lib/env.ts'],
     },
     {
       displayName: 'e2e',
@@ -19,6 +20,7 @@ export default async (): Promise<Config.InitialOptions> => ({
       transform: {
         '^.+\\.(t|j)s$': 'ts-jest',
       },
+      setupFiles: ['./test/lib/env.ts'],
     },
   ],
 });

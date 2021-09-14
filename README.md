@@ -13,7 +13,7 @@ $ npm install
 ## Running the app
 
 ```bash
-# To run tests, provide a postgres connection string in the DATABASE_URL environment variable. Or use docker-compose:
+# To run the application, provide a postgres connection string in the DATABASE_URL environment variable. Or use docker-compose:
 $ docker-compose up -d
 
 # Next, apply database migrations:
@@ -26,6 +26,12 @@ $ env $(cat .env.development) npm run start
 ## Test
 
 ```bash
+# To run the tests, provide a postgres connection string in the DATABASE_URL environment variable (can also be started with docker-compose).
+$ docker-compose up -d
+
+# Next, apply database migrations to the test database:
+$ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/tests?schema=public npx prisma migrate deploy
+
 # run tests
 $ npm run test
 
